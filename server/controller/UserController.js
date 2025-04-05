@@ -41,7 +41,54 @@ export const RegisterUser = async (req, res) => {
   };
 
 
-// export const LoginUser = async (req, res) => {
+export const LoginUser = async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password)
+      return res.status(400).json({ message: "Please fill all fields" });
+  
+    try {
+      const user = await User.findOne({ email });
+      if (!user)
+        return res.status(400).json({ message: "Invalid credentials" });
+  
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch)
+        return res.status(400).json({ message: "Invalid credentials" });
+  
+      const payload = {
+        userId: user._id,
+        role: user.role,
+      };
+  
+      const token = jwt.sign(payload, secretKey, { expiresIn: "1min" });
+  
+      return res.status(200).json({
+        message: "Login successful",
+        user: {
+          username: user.username,
+          email: user.email,
+          role: user.role,
+          token: token,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+  // export const LoginUser = async (req, res) => {
 //   const { email, password } = req.body;
 //   if (!email || !password)
 //     return res.status(400).json({ message: "Please fill all the fields" });
@@ -81,41 +128,3 @@ export const RegisterUser = async (req, res) => {
 //   }
 // };
 
-
-
-
-export const LoginUser = async (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password)
-      return res.status(400).json({ message: "Please fill all fields" });
-  
-    try {
-      const user = await User.findOne({ email });
-      if (!user)
-        return res.status(400).json({ message: "Invalid credentials" });
-  
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch)
-        return res.status(400).json({ message: "Invalid credentials" });
-  
-      const payload = {
-        userId: user._id,
-        role: user.role,
-      };
-  
-      const token = jwt.sign(payload, secretKey, { expiresIn: "1d" });
-  
-      return res.status(200).json({
-        message: "Login successful",
-        user: {
-          username: user.username,
-          email: user.email,
-          role: user.role,
-          token: token,
-        },
-      });
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  };

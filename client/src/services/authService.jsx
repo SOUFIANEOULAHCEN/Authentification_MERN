@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const API_URL = 'http://localhost:4000/auth'
+// const API_URL = "http://server:4000/auth";
 
 const registerUser = async (userData) => {
   const response = await axios.post(`${API_URL}/register`, userData)

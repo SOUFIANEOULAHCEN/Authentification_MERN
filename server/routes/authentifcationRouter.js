@@ -23,8 +23,8 @@ authentifcationRouter.post("/login", LoginUser);
 // );
 
 authentifcationRouter.get("/dashbordAdmin", authMiddleware, adminMiddleware, (req, res) => {
-  res.send(`Hello Admin - ID: ${req.userId}, Role: ${req.role}`);
+  res.json(`Hello Admin - ID: ${req.userId}, Role: ${req.role}`);
 });
 authentifcationRouter.get("/register", (req, res) => {
-  res.send("Hello from authentifcationRouter register");
+  res.json("Hello from authentifcationRouter register");
 });

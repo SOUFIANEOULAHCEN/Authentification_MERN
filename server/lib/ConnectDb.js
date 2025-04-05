@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
-// import dotenv from "dotenv";
+import dotenv from "dotenv";
+dotenv.config();
 
-// dotenv.config();
-
+const DB_URL = process.env.DB_URL;
 const connectDb = async () => {
   try {
-    mongoose.connect("mongodb://localhost:27017/auth2", {
+    // mongoose.connect("mongodb://localhost:27017/auth2", {
+    mongoose.connect(DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
@@ -16,3 +17,6 @@ const connectDb = async () => {
 };
 
 export default connectDb;
+
+
+
